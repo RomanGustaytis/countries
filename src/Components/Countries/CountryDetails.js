@@ -83,7 +83,7 @@ function CountryDetails() {
             <p className="mb-2"><strong>Population:</strong> {population.toLocaleString()}</p>
             <p className="mb-2"><strong>Languages:</strong> {Object.values(languages).join(', ')}</p>
             <p className="mb-2"><strong>Currencies:</strong> {Object.values(currencies).map(curr => curr.name).join(', ')}</p>
-            <p className="flex justify-between gap-3">
+            <p className="flex justify-between items-center gap-3">
                 {googleMaps && (
                     <a href={googleMaps} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">View on Google Maps</a>
                 )}

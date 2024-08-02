@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-// Функция для получения списка стран
 const fetchCountries = async () => {
     try {
         const response = await fetch('https://restcountries.com/v3.1/all');
@@ -23,25 +22,24 @@ function CountryList() {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // Оптимизированный useEffect с использованием useCallback
-    const loadCountries = useCallback(async () => {
-        setLoading(true);
-        try {
-            const data = await fetchCountries();
-            data.sort((a, b) => a.name.common.localeCompare(b.name.common)); // Сортировка стран по алфавиту
-            setCountries(data);
-            setError(null);
-        } catch (error) {
-            setError(error.message);
-            setCountries([]);
-        } finally {
-            setLoading(false);
-        }
-    }, []);
-
     useEffect(() => {
+        const loadCountries = async () => {
+            setLoading(true);
+            try {
+                const data = await fetchCountries();
+                data.sort((a, b) => a.name.common.localeCompare(b.name.common));
+                setCountries(data);
+                setError(null);
+            } catch (error) {
+                setError(error.message);
+                setCountries([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+
         loadCountries();
-    }, [loadCountries]);
+    }, []);
 
     if (loading) {
         return <div className="text-center mt-4">Loading...</div>;
