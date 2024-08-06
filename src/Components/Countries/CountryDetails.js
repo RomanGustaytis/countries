@@ -1,22 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 
-async function fetchCountry(name) {
-    try {
-        const response = await fetch(`https://restcountries.com/v3.1/name/${name}`);
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        if (data.length === 0) {
-            throw new Error('Country not found');
-        }
-        return data[0];
-    } catch (error) {
-        throw new Error(error.message);
-    }
-}
-
 function CountryDetails() {
     const { name } = useParams();
     const [country, setCountry] = useState(null);
@@ -24,20 +8,27 @@ function CountryDetails() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const getCountry = async () => {
-            try {
-                const data = await fetchCountry(name);
-                setCountry(data);
+        fetch(`https://restcountries.com/v3.1/name/${name}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.length === 0) {
+                    throw new Error('Country not found');
+                }
+                setCountry(data[0]);
                 setError(null);
-            } catch (error) {
+            })
+            .catch(error => {
                 setError(error.message);
                 setCountry(null);
-            } finally {
+            })
+            .finally(() => {
                 setLoading(false);
-            }
-        };
-
-        getCountry();
+            });
     }, [name]);
 
     if (loading) {

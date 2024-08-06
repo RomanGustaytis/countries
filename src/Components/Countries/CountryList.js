@@ -1,44 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-const fetchCountries = async () => {
-    try {
-        const response = await fetch('https://restcountries.com/v3.1/all');
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        if (data.length === 0) {
-            throw new Error('No countries found');
-        }
-        return data;
-    } catch (error) {
-        throw new Error(error.message);
-    }
-};
-
 function CountryList() {
     const [countries, setCountries] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const loadCountries = async () => {
-            setLoading(true);
-            try {
-                const data = await fetchCountries();
+        fetch('https://restcountries.com/v3.1/all')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.length === 0) {
+                    throw new Error('No countries found');
+                }
                 data.sort((a, b) => a.name.common.localeCompare(b.name.common));
                 setCountries(data);
                 setError(null);
-            } catch (error) {
+            })
+            .catch(error => {
                 setError(error.message);
                 setCountries([]);
-            } finally {
+            })
+            .finally(() => {
                 setLoading(false);
-            }
-        };
-
-        loadCountries();
+            });
     }, []);
 
     if (loading) {
