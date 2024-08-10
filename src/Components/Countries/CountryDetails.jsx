@@ -8,6 +8,13 @@ function CountryDetails() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        if (!name || typeof name !== 'string') {
+            setError('Invalid country name');
+            setLoading(false);
+            return;
+        }
+
+        setLoading(true);
         fetch(`https://restcountries.com/v3.1/name/${name}`)
             .then(response => {
                 if (!response.ok) {
