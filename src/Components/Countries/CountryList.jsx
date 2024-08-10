@@ -48,7 +48,7 @@ function CountryList() {
                 <ul className="space-y-2">
                     {countries.map(country => (
                         <li key={country.cca3} className="hover:bg-gray-200 rounded">
-                            <Link to={`/country/${country.name.common}`} className="block p-2">
+                            <Link to={`${country.name.common}`} className="block p-2">
                                 {country.name.common}
                             </Link>
                         </li>

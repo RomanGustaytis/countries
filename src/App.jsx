@@ -11,7 +11,7 @@ function App() {
           <h1 className="font-bold text-3xl text-center my-4">Country Information</h1>
           <Routes>
             <Route path="/" element={<CountryList />} />
-            <Route path="/country/:name" element={<CountryDetails />} />
+            <Route path="/:name" element={<CountryDetails />} />
           </Routes>
         </div>
       </Router>
